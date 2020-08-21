@@ -1,0 +1,40 @@
+version: '2.4'
+x-base:
+  &default-base
+  restart: always
+  stop_grace_period: 1m
+  logging:
+    driver: json-file
+    options:
+      max-size: '10m'
+      max-file: '1'
+  mem_swappiness: 0
+
+services:
+  collector-test:
+    <<: *default-base
+    image: metrodatatech/mdtdb:12-full
+    shm_size: '2gb'
+    ports:
+      - 5434:5432
+    environment:
+      TZ: UTC
+      POSTGRES_PASSWORD: "123456"
+    volumes:
+      - ./backup:/mnt/backup
+      - ./collector:/var/lib/postgresql/data
+      
+  collector-test-backup:
+    <<: *default-base
+    image: metrodatatech/mdtdb:12-full
+    # COMMENT this out after replication
+    command: tail -F anything
+    shm_size: '2gb'
+    ports:
+      - 5435:5432
+    environment:
+      TZ: UTC
+      POSTGRES_PASSWORD: "123456"
+    volumes:
+      - ./backup:/mnt/backup
+      - ./collector2:/var/lib/postgresql/data

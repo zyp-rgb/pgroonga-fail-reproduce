@@ -1,0 +1,36 @@
+--
+-- PostgreSQL database cluster dump
+--
+
+SET default_transaction_read_only = off;
+
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+--
+-- Roles
+--
+
+CREATE ROLE docker;
+ALTER ROLE docker WITH SUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'abc123';
+CREATE ROLE postgres;
+ALTER ROLE postgres WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION BYPASSRLS;
+CREATE ROLE readonly;
+ALTER ROLE readonly WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB NOLOGIN NOREPLICATION NOBYPASSRLS;
+CREATE ROLE replicator;
+ALTER ROLE replicator WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN REPLICATION NOBYPASSRLS PASSWORD 'abc123';
+CREATE ROLE repmgr;
+ALTER ROLE repmgr WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN NOREPLICATION NOBYPASSRLS;
+--
+-- User Configurations
+--
+
+--
+-- User Config "repmgr"
+--
+
+ALTER ROLE repmgr SET search_path TO 'repmgr', '$user', 'public';
+
+
+--
+-- PostgreSQL database cluster dump complete
+--
